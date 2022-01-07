@@ -1,2 +1,4 @@
 # orbital-patterns
-planets go vrooom vroom around sun, make pog pattern
+- Click to spawn planets
+- Press "S" to capture screenshot. Image will be saved in the same directory as the script.
+- Press "E" to exit.
