@@ -4,3 +4,4 @@
 - Click to spawn planets
 - Press "S" to capture screenshot. Image will be saved in the same directory as the script.
 - Press "E" to exit.
+- Press "SPACE" to get a view of the axes and a line joining the origin and your cursor.
