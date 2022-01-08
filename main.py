@@ -15,6 +15,7 @@ height = screen.get_height()
 fps = pygame.time.Clock()
 counter = 0
 centre = (width//2,height//2)
+show_axes = False
 
 lines = []
 
@@ -22,7 +23,7 @@ def from_centre(x,y):
     return (centre[0]+x,centre[1]-y)
 
 def render():
-    global angle,x,y,a, omega, count, planets
+    global angle,x,y,a, omega, count, planets, show_axes
     screen.fill((0, 0, 0))
     for planet in planets.values():
         planet["angle"] = planet["angle"] + planet["omega"]
@@ -63,7 +64,19 @@ def render():
                 j[0],j[1]
             )
 
-
+    if show_axes == True:
+        pygame.draw.line(
+            screen,
+            (0,255,0),
+            (0, height//2),
+            (width, height//2)
+        )
+        pygame.draw.line(
+            screen,
+            (0,255,0),
+            (width//2, 0),
+            (width//2, height)
+        )
     pygame.draw.circle(
         screen,
         (253, 184, 19),
@@ -87,7 +100,13 @@ def render():
     )
     font = pygame.font.SysFont("monospace", 15)
     radius_display = font.render(f"Radius: {round(math.sqrt((centre[0]-pygame.mouse.get_pos()[0])**2 + (centre[1]-pygame.mouse.get_pos()[1])**2))}", 1, (255,255,255))
+    mouse_pos = pygame.mouse.get_pos()
+    ang = math.atan2(
+        centre[1]-mouse_pos[1], mouse_pos[0]-centre[0]
+    )
+    angledisplay = font.render(f"Angle: {math.degrees(ang)}", 1, (255,255,255))
     screen.blit(radius_display, pygame.mouse.get_pos())
+    screen.blit(angledisplay, (mouse_pos[0], mouse_pos[1]+20))
     pygame.display.update()
     fps.tick(60)
 
@@ -114,6 +133,10 @@ while not done:
                 "x":pygame.mouse.get_pos()[0],
                 "y":pygame.mouse.get_pos()[1],
             }
+        if pygame.key.get_pressed()[pygame.K_SPACE]:
+            show_axes = True
+        else:
+            show_axes = False
     if not done:
         render()
 
