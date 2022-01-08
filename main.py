@@ -77,6 +77,12 @@ def render():
             (width//2, 0),
             (width//2, height)
         )
+        pygame.draw.line(
+            screen,
+            (255,0,0),
+            centre,
+            pygame.mouse.get_pos()
+        )
     pygame.draw.circle(
         screen,
         (253, 184, 19),
@@ -122,7 +128,7 @@ while not done:
             mouse_pos = pygame.mouse.get_pos()
             count += 1
             rad = math.sqrt((centre[0]-mouse_pos[0])**2 + (centre[1]-mouse_pos[1])**2)
-            ang_vel = math.sqrt(1/rad**3)*60
+            ang_vel = math.sqrt(1/rad**3)*90
             ang = math.atan2(
                 centre[1]-mouse_pos[1], mouse_pos[0]-centre[0]
             )
