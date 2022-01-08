@@ -1,5 +1,6 @@
 import pygame, sys
 import math
+import os
 from datetime import datetime
 
 planets = {}
@@ -122,7 +123,9 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_s:
-                pygame.image.save(screen, datetime.now().strftime("%Y-%m-%d-%H-%M-%S")+".png")
+                if not os.path.isdir("images"):
+                    os.makedirs("images")
+                pygame.image.save(screen, f"images/{datetime.now().strftime('%Y-%m-%d-%H-%M-%S')}.png")
             if event.key == pygame.K_a:
                 show_axes = not show_axes
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
