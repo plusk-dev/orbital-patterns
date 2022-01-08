@@ -110,7 +110,7 @@ def render():
     ang = math.atan2(
         centre[1]-mouse_pos[1], mouse_pos[0]-centre[0]
     )
-    angledisplay = font.render(f"Angle: {round(math.degrees(ang),2)}", 1, (255,255,255))
+    angledisplay = font.render(f"Angle: {round(math.degrees(ang))}", 1, (255,255,255))
     screen.blit(radius_display, mouse_pos)
     screen.blit(angledisplay, (mouse_pos[0], mouse_pos[1]+20))
 
