@@ -1,7 +1,6 @@
 import pygame, sys
 import math
-import random
-pi = math.pi
+from datetime import datetime
 
 planets = {}
 count = 0
@@ -9,11 +8,11 @@ count = 0
 pygame.init()
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.set_caption("Orbit Visualizer")
-done = False
+
 width = screen.get_width()
 height = screen.get_height()
 fps = pygame.time.Clock()
-counter = 0
+
 centre = (width//2,height//2)
 show_axes = False
 
@@ -23,8 +22,8 @@ def from_centre(x,y):
     return (centre[0]+x,centre[1]-y)
 
 def render():
-    global angle,x,y,a, omega, count, planets, show_axes
     screen.fill((0, 0, 0))
+    
     for planet in planets.values():
         planet["angle"] = planet["angle"] + planet["omega"]
         planet["x"] = planet["a"] * math.cos(planet["angle"]) # New x
@@ -54,9 +53,10 @@ def render():
             )
 
         for k in range(1,count):
-            if counter%6==0:
-                lines.append((from_centre(planets[f"{k}"]["x"], planets[f"{k}"]["y"]),
-                            from_centre(planets[f"{int(k)+1}"]["x"], planets[f"{int(k)+1}"]["y"])))
+            lines.append(
+                (from_centre(planets[f"{k}"]["x"], planets[f"{k}"]["y"]),
+                 from_centre(planets[f"{k+1}"]["x"], planets[f"{k+1}"]["y"]))
+            )
         for j in lines:
             pygame.draw.line(
                 screen,
@@ -110,20 +110,21 @@ def render():
     ang = math.atan2(
         centre[1]-mouse_pos[1], mouse_pos[0]-centre[0]
     )
-    angledisplay = font.render(f"Angle: {math.degrees(ang)}", 1, (255,255,255))
-    screen.blit(radius_display, pygame.mouse.get_pos())
+    angledisplay = font.render(f"Angle: {round(math.degrees(ang),2)}", 1, (255,255,255))
+    screen.blit(radius_display, mouse_pos)
     screen.blit(angledisplay, (mouse_pos[0], mouse_pos[1]+20))
-    pygame.display.update()
-    fps.tick(60)
 
 
-while not done:
-    counter += 1
+while True:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_e]:
-            done = True
-        elif pygame.key.get_pressed()[pygame.K_s]:
-            pygame.image.save(screen, f"{counter}.jpeg")
+        if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_q]:
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_s:
+                pygame.image.save(screen, datetime.now().strftime("%Y-%m-%d-%H-%M-%S")+".png")
+            if event.key == pygame.K_a:
+                show_axes = not show_axes
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_pos = pygame.mouse.get_pos()
             count += 1
@@ -139,12 +140,6 @@ while not done:
                 "x":pygame.mouse.get_pos()[0],
                 "y":pygame.mouse.get_pos()[1],
             }
-        if pygame.key.get_pressed()[pygame.K_SPACE]:
-            show_axes = True
-        else:
-            show_axes = False
-    if not done:
-        render()
-
-pygame.quit()
-sys.exit()
+    render()
+    pygame.display.update()
+    fps.tick(60)
