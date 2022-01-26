@@ -13,7 +13,7 @@ pygame.display.set_caption("Orbit Visualizer")
 width = screen.get_width()
 height = screen.get_height()
 fps = pygame.time.Clock()
-
+counter = 0
 centre = (width//2,height//2)
 show_axes = False
 
@@ -54,10 +54,11 @@ def render():
             )
 
         for k in range(1,count):
-            lines.append(
-                (from_centre(planets[f"{k}"]["x"], planets[f"{k}"]["y"]),
-                 from_centre(planets[f"{k+1}"]["x"], planets[f"{k+1}"]["y"]))
-            )
+            if counter%6 == 0:
+                lines.append(
+                    (from_centre(planets[f"{k}"]["x"], planets[f"{k}"]["y"]),
+                     from_centre(planets[f"{k+1}"]["x"], planets[f"{k+1}"]["y"]))
+                )
         for j in lines:
             pygame.draw.line(
                 screen,
@@ -117,6 +118,7 @@ def render():
 
 
 while True:
+    counter += 1
     for event in pygame.event.get():
         if event.type == pygame.QUIT or pygame.key.get_pressed()[pygame.K_q]:
             pygame.quit()
